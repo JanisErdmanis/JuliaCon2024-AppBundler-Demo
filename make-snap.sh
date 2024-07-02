@@ -8,9 +8,26 @@ info() {
 }
 
 APPDIR="$1"
+TEMP_DIR=""
+
+cleanup() {
+    if [ -n "$TEMP_DIR" ] && [ -d "$TEMP_DIR" ]; then
+        info "Cleaning up temporary directory"
+        rm -rf "$TEMP_DIR"
+    fi
+}
+
+trap cleanup EXIT
+
+if [ "${APPDIR##*.}" = "snap" ]; then
+    info "Input is a snap file, unsquashing..."
+    TEMP_DIR=$(mktemp -d)
+    unsquashfs -d "$TEMP_DIR" "$APPDIR"
+    APPDIR="$TEMP_DIR"
+fi
 
 if [ -z "$2" ]; then
-    SNAP="${APPDIR%.*}.snap"
+    SNAP="${1%.*}.snap"
 else
     SNAP="$2"
 fi
@@ -20,5 +37,5 @@ info "Precompiling"
 $APPDIR/bin/precompile
 
 info "Bundling the SNAP"
-rm -f $SNAP
-mksquashfs $APPDIR $SNAP -noappend -comp xz
+rm -f "$SNAP"
+mksquashfs "$APPDIR" "$SNAP" -noappend -comp xz

@@ -14,4 +14,4 @@ AppBundler.bundle_app(Linux(:x86_64), APP_DIR, "$BUILD_DIR/gtkapp-x64-linux")
 AppBundler.bundle_app(Linux(:aarch64), APP_DIR, "$BUILD_DIR/gtkapp-arm64-linux")
 AppBundler.bundle_app(Linux(:aarch64), APP_DIR, "$BUILD_DIR/gtkapp-arm64.snap")
 
-AppBundler.bundle_app(Windows(:x86_64), APP_DIR, "$BUILD_DIR/gtkapp-x64-win")
+AppBundler.bundle_app(Windows(:x86_64), APP_DIR, "$BUILD_DIR/gtkapp-x64-win", debug=true)
